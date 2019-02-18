@@ -1,13 +1,9 @@
 var axios = require("axios");
 var cheerio = require("cheerio");
+var db = require("../models");
 
 module.exports = function(app) {
-  // your scraping code goes here
-  app.get("/", function(req, res) {
-    res.render("index");
-  });
   app.get("/scrape", function(req, res) {
-    // app.get("/scrape", function(req, res) {
     axios
       .get("https://thenewspaper.ca/category/arts/")
       .then(function(axios_response) {
@@ -19,15 +15,29 @@ module.exports = function(app) {
           titles.push($(element).text());
         });
         $(".td-excerpt").each((i, element) => {
-          summaries.push($(element).text());
+          var split = $(element)
+            .text()
+            .split("\n");
+          for (var j = 0; j < split.length; j++) {
+            if (split[i] === "") {
+              split.splice(i, 1);
+            }
+          }
+          summaries.push(split);
         });
         for (var i = 0; i < summaries.length; i++) {
           var obj = {};
-          obj.titles = titles[i];
-          obj.summaries = summaries[i];
-          objects.push(obj);
+          obj.title = titles[i];
+          obj.summary = summaries[i];
+          obj.link = "hi";
+          db.Article.create(obj, function(err, res) {
+            if (err) {
+              console.log("Judy Error: " + err);
+            }
+            console.log("sucess");
+            console.log(res);
+          });
         }
-        console.log(objects);
         res.render("index");
       });
   });
