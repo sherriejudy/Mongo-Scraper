@@ -10,7 +10,7 @@ module.exports = function(app) {
         var $ = cheerio.load(axios_response.data);
         var titles = [];
         var summaries = [];
-        var objects = [];
+        var links = [];
         $("h3.entry-title.td-module-title a").each((i, element) => {
           titles.push($(element).text());
         });
@@ -25,11 +25,15 @@ module.exports = function(app) {
           }
           summaries.push(split);
         });
+        $(".td-module-image .td-module-thumb a").each((i, element) => {
+          links.push($(element).attr("href"));
+        });
         for (var i = 0; i < summaries.length; i++) {
           var obj = {};
           obj.title = titles[i];
           obj.summary = summaries[i];
-          obj.link = "hi";
+          obj.link = links[i];
+          obj.saved = false;
           db.Article.create(obj, function(err, res) {
             if (err) {
               console.log("Judy Error: " + err);
@@ -38,7 +42,34 @@ module.exports = function(app) {
             console.log(res);
           });
         }
-        res.render("index");
+        res.redirect("/");
+      });
+  });
+  app.post("/api/saved/:id", function(req, res) {
+    db.Article.findOneAndUpdate({ _id: req.params.id }, { saved: true })
+      .then(() => {
+        res.redirect("/");
+      })
+      .catch(err => {
+        console.log("Error: " + err);
+      });
+  });
+  app.post("/api/unsave/:id", function(req, res) {
+    db.Article.findOneAndUpdate({ _id: req.params.id }, { saved: false })
+      .then(() => {
+        res.redirect("/saved");
+      })
+      .catch(err => {
+        console.log("Error: " + err);
+      });
+  });
+  app.post("/api/delete/:id", function(req, res) {
+    db.Article.deleteOne({ _id: req.params.id })
+      .then(() => {
+        res.redirect("/saved");
+      })
+      .catch(err => {
+        console.log("Error: " + err);
       });
   });
 };

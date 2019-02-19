@@ -17,6 +17,9 @@ var PORT = process.env.PORT || 8080;
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
+// Expose the public directory to access CSS files
+app.use(express.static("public"));
+
 // Setting up handlebars
 app.engine("handlebars", exphbs({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");

@@ -1,40 +1,72 @@
-<!--Saved Articles Page-->
-
+<!--Homepage-->
 <div class="container">
-
     <div class="col-md-12 jumbotron">
         <div class="text-center">
-            <h1> Saved Articles</h1>
+            <h1> Mongo Scraper</h1>
         </div>
+
     </div>
     <div class="col-md-12">
         {{#if article}}
         {{#each article}}
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h4>{{this.title}}</h4>
-            </div>
-            <div class="panel-body">
-                <p> {{this.summary}}</p>
-                <a href={{this.link}} target="_blank">{{this.link}}</a>
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">{{this.title}}</h4>
+                <a class="font-italic" href={{this.link}} target="_blank">{{this.link}}</a>
                 <br><br>
-                <button type="button" class="btn btn-success addComment" data-toggle="modal"
-                    data-target="#commentModal{{this._id}}" data-id={{this._id}}>Add a Comment</button>
-                <button type="button" class="btn btn-danger delete" data-id={{this._id}}>Delete</button>
+                <p class="card-text"> {{this.summary}}</p>
+                <div class="btn-group" role="group" aria-label="Basic example">
+                    <form action="/api/unsave/{{this.id}}" method="POST">
+                        <button class="btn btn-secondary" type="submit">Unsave</button>
+                    </form>
+                    <form action="/api/delete/{{this.id}}" method="POST">
+                        <button class="btn btn-danger" type="submit">Delete</button>
+                    </form>
+                    {{!-- <form action="/api/comment/{{this.id}}" method="POST"> --}}
+                    {{!-- <input type="hidden" name="comment" value="true"> --}}
+                    <button class="btn btn-primary" type="button" data-toggle="modal"
+                        data-target="#exampleModalCenter{{this.id}}">Comment</button>
+                    {{!-- </form> --}}
+                </div>
             </div>
         </div>
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModalCenter{{this.id}}" tabindex="-1" role="dialog"
+            aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">Comments for: {{this.title}}</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    {{#if this.comment}}
+                    <div class="modal-body">
+                        {{this.comment}}
+                    </div>
+                    {{else}}
+                    <div class="modal-body">
+                        <p class="font-italic">
+                            No comments for this article yet.
+                        </p>
+                    </div>
+                    {{/if}}
+                    <textarea></textarea>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-success">Add Comment</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         {{/each}}
         {{else}}
-        <div class="panel panel-default">
-            <div class="panel-body">
-                <h4>You have no saved articles.</h4>
+        <div class="card">
+            <div class="card-body">
+                <h4>Uh Oh. Looks like we don't have any saved articles.</h4>
             </div>
         </div>
         {{/if}}
     </div>
 </div>
-
-<!--Clicked Notes Modal-->
-{{#each article}}
-{{> comment-modal }}
-{{/each}}
