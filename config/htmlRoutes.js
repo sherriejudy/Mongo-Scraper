@@ -22,11 +22,21 @@ module.exports = function(app) {
   app.get("/saved", function(req, res) {
     // Grab every document in the Articles collection
     db.Article.find({ saved: true })
-      .then(function(data) {
+      .then(function(articles) {
         // If we were able to successfully find Articles, send them back to the client
-        res.render("saved", {
-          msg: "test",
-          article: data
+        db.Comment.find({}).then(comments => {
+          for (var j = 0; j < articles.length; j++) {
+            for (var i = 0; i < comments.length; i++) {
+              if (articles[j].comment == comments[i]._id) {
+                articles[j].commentObject = comments[i];
+              }
+            }
+          }
+          console.log(articles);
+          // console.log(comments);
+          res.render("saved", {
+            article: articles
+          });
         });
       })
       .catch(function(err) {
@@ -56,5 +66,39 @@ module.exports = function(app) {
         // If an error occurred, send it to the client
         res.json(err);
       });
+  });
+  // Create a new note
+  app.post("/comments/save/:id", function(req, res) {
+    // Create a new comment and pass the req.body to the entry
+    var newComment = new Comment({
+      comment: req.comment.text,
+      article: req.params.id
+    });
+    // And save the new comment the db
+    newComment.save(function(error, comment) {
+      // Log any errors
+      if (error) {
+        console.log(error);
+      }
+      // Otherwise
+      else {
+        // Use the article id to find and update it's notes
+        Article.findOneAndUpdate(
+          { _id: req.params.id },
+          { $push: { comment: comment } }
+        )
+          // Execute the above query
+          .exec(function(err) {
+            // Log any errors
+            if (err) {
+              console.log(err);
+              res.send(err);
+            } else {
+              // Or send the note to the browser
+              res.send(comment);
+            }
+          });
+      }
+    });
   });
 };

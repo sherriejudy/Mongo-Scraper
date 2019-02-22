@@ -21,9 +21,30 @@ app.use(bodyParser.json());
 app.use(express.static("public"));
 
 // Setting up handlebars
-app.engine("handlebars", exphbs({ defaultLayout: "main" }));
+const isEqualHelperHandlerbar = function(a, b, opts) {
+  if (a == b) {
+    return opts.fn(this);
+  } else {
+    return opts.inverse(this);
+  }
+};
+
+app.engine(
+  "handlebars",
+  exphbs({
+    defaultLayout: "main",
+    helpers: {
+      isEqual: isEqualHelperHandlerbar
+    }
+  })
+);
 app.set("view engine", "handlebars");
 app.use(methodOverride("_method"));
+
+// var MONGODB_URI =
+//   process.env.MONGODB_URI || "mongodb://localhost/mongoHeadlines";
+
+// mongoose.connect(MONGODB_URI);
 
 // Database configuration with mongoose
 var databaseUri = "mongodb://localhost/mongoosearticles";

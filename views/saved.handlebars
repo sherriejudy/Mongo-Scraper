@@ -22,11 +22,8 @@
                     <form action="/api/delete/{{this.id}}" method="POST">
                         <button class="btn btn-danger" type="submit">Delete</button>
                     </form>
-                    {{!-- <form action="/api/comment/{{this.id}}" method="POST"> --}}
-                    {{!-- <input type="hidden" name="comment" value="true"> --}}
-                    <button class="btn btn-primary" type="button" data-toggle="modal"
-                        data-target="#exampleModalCenter{{this.id}}">Comment</button>
-                    {{!-- </form> --}}
+                    <button class="btn btn-primary comment-btn" type="button" data-toggle="modal"
+                        data-target="#exampleModalCenter{{this.id}}" data-id={{this.comment}}>Comment</button>
                 </div>
             </div>
         </div>
@@ -41,10 +38,18 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    {{#if this.comment}}
+                    {{#if this.commentObject}}
+                    {{#each this.commentObject}}
                     <div class="modal-body">
-                        {{this.comment}}
+
+                        {{this}}
+                        {{!-- delete note button --}}
+                        <form action="/api/deleteComment/{{../this.id}}&{{@index}}" method="POST">
+                            <button type="submit" class="btn btn-danger deleteComment" data-note-id={{this.id}}
+                                data-article-id={{this.article}}>X</button>
+                        </form>
                     </div>
+                    {{/each}}
                     {{else}}
                     <div class="modal-body">
                         <p class="font-italic">
@@ -52,9 +57,13 @@
                         </p>
                     </div>
                     {{/if}}
-                    <textarea></textarea>
+
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-success">Add Comment</button>
+                        <form action="/api/comment/{{this.id}}" method="POST">
+                            <textarea class="form-control" rows="4" placeholder="New Comment" name="comment"></textarea>
+                            <button type="submit" class="btn btn-success saveComment" data-id={{this.id}}>Add
+                                Comment</button>
+                        </form>
                     </div>
                 </div>
             </div>
