@@ -1,7 +1,6 @@
 # Mongo-Scraper
-*Burgers* is deployed to Heroku. Please check it out [here](https://mongo-scraper11.herokuapp.com/)
+*Mongo Scraper* is deployed to Heroku. Please check it out [here](https://mongo-scraper11.herokuapp.com/)
 
-## Overview
 An app that scrapes articles using Mongoose and Cheerio from a news publication and lets users save articles and leave comments on the latest news. The Newspaper is University of Toronto's Independent publication, with a new [Wordpress Website] (https://thenewspaper.ca/) Project implemented by Judy Hu, 2019. 
 
 ## How It Works
