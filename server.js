@@ -41,18 +41,18 @@ app.engine(
 app.set("view engine", "handlebars");
 app.use(methodOverride("_method"));
 
-// var MONGODB_URI =
-//   process.env.MONGODB_URI || "mongodb://localhost/mongoHeadlines";
+var MONGODB_URI =
+  process.env.MONGODB_URI || "mongodb://localhost/mongoosearticles";
 
-// mongoose.connect(MONGODB_URI);
+mongoose.connect(MONGODB_URI);
 
 // Database configuration with mongoose
-var databaseUri = "mongodb://localhost/mongoosearticles";
-if (process.env.MONGODB_URI) {
-  mongoose.connect(process.env.MONGODB_URI);
-} else {
-  mongoose.connect(databaseUri);
-}
+// var databaseUri = "mongodb://localhost/mongoosearticles";
+// if (process.env.MONGODB_URI) {
+//   mongoose.connect(process.env.MONGODB_URI);
+// } else {
+//   mongoose.connect(databaseUri);
+// }
 var db = mongoose.connection;
 db.on("error", function(error) {
   console.log("Mongoose Error: ", error);

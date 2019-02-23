@@ -38,25 +38,11 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    {{#if this.commentObject}}
-                    {{#each this.commentObject}}
                     <div class="modal-body">
-
-                        {{this}}
-                        {{!-- delete note button --}}
-                        <form action="/api/deleteComment/{{../this.id}}&{{@index}}" method="POST">
-                            <button type="submit" class="btn btn-danger deleteComment" data-note-id={{this.id}}
-                                data-article-id={{this.article}}>X</button>
-                        </form>
-                    </div>
-                    {{/each}}
-                    {{else}}
-                    <div class="modal-body">
-                        <p class="font-italic">
+                        <p>
                             No comments for this article yet.
                         </p>
                     </div>
-                    {{/if}}
 
                     <div class="modal-footer">
                         <form action="/api/comment/{{this.id}}" method="POST">

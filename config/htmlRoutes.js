@@ -23,7 +23,7 @@ module.exports = function(app) {
     // Grab every document in the Articles collection
     db.Article.find({ saved: true })
       .then(function(articles) {
-        // If we were able to successfully find Articles, send them back to the client
+        // If we were able to successfully find Articles, send them back to the client. AJAX - comment button
         db.Comment.find({}).then(comments => {
           for (var j = 0; j < articles.length; j++) {
             for (var i = 0; i < comments.length; i++) {
