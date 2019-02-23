@@ -15,11 +15,5 @@ An app that scrapes articles using Mongoose and Cheerio from a news publication 
 - Node.js
 - Express.js
 - Handlebars.js
-- Mongoose
-- npm packages (
-    - body-parser
-    - express
-    - express-handlebars
-    - mongoose
-    - cheerio
-    - request
+- npm packages (Mongoose, Cheerio, axios etc)
+  
